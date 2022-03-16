@@ -37,7 +37,7 @@ def answers(name: pd.DataFrame, console: pd.DataFrame, company: pd.DataFrame, so
         ORDER BY userscore {sort}
         LIMIT 10
         """
-    elif type == 2:
+    else:
         query = f"""
         SELECT
             name_id
