@@ -77,13 +77,14 @@ def enrich_data(original_pd: pd.DataFrame, extra_pd: pd.DataFrame, on_x: str, on
         hp.print_log(string="Operación de enriquecimiento de datos terminada.")
     return None
 
-def get_full_score_data(reviews: pd.DataFrame, consoles: pd.DataFrame):
+def get_full_score_data(reviews: pd.DataFrame, consoles: pd.DataFrame, check_output:bool = False):
     # obtener una vista con toda la data
     try:
         merge_pd = pd.merge(left=reviews, right=consoles, left_on="console_id", right_on="id", how="left", copy=True)
         merge_pd = merge_pd.drop(["id", "value"], axis=1)
-        hp.print_log(string="Se muestran los 10 primeros registros de la vista:")
-        print(merge_pd.head(10))
+        if check_output:
+            hp.print_log(string="Se muestran los 10 primeros registros de la vista:")
+            print(merge_pd.head(10))
         return merge_pd
     except:
         hp.print_log(string="Error generando la vista de datos.")

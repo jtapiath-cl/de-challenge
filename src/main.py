@@ -14,6 +14,17 @@ files_to_read = {
     "puntajes": os.path.join(os.getcwd(), "data", "result.csv")
 }
 
+files_to_write = {
+    "company_tbl": "companies.csv",
+    "title_tbl": "titles.csv",
+    "scores_tbl": "scores.csv",
+    "consoles_tbl": "consoles.csv",
+    "top_company_console": "top_company.csv",
+    "worst_company_console": "worst_company.csv",
+    "top_all": "top_all.csv",
+    "worst_all": "worst_all.csv"
+}
+
 reviews_pd = ["review_id", "name_id", "console_id", "userscore", "date"]
 consola_pd = ["id", "company_id", "value"]
 
@@ -59,6 +70,7 @@ def answers(name: pd.DataFrame, console: pd.DataFrame, company: pd.DataFrame, so
     return answer_df
 
 if __name__ == "__main__":
+    hp.print_log(string="Proceso de ingesta iniciado.")
     # obtener los archivos fuente
     for file in files_to_read:
         try:
@@ -112,3 +124,17 @@ if __name__ == "__main__":
     # print(worst_all)
 
     # exportar respuestas
+    for df in files_to_write:
+        try:
+            hp.export_data(dataframe=locals()[df], filename=files_to_write.get(df))
+        except:
+            hp.print_log(string=f"No se pudo escribir el archivo {files_to_read[df]}.\nSaliendo ahora...")
+            sys.exit(1)
+        finally:
+            hp.print_log(string="Toda la data fue exportada.")
+    
+    # limpieza de memoria y salida
+    del top_company_console, worst_company_console, top_all, worst_all
+    del company_tbl, title_tbl, scores_tbl, consoles_tbl
+    hp.print_log(string="Proceso de ingesta finalizado. Saliendo ahora...")
+    sys.exit(0)
